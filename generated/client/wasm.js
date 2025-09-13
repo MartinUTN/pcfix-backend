@@ -240,7 +240,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Martín Ratti\\Desktop\\PCFIX\\pcfix-backend\\generated\\client",
+      "value": "C:\\Users\\tacon\\OneDrive\\Escritorio\\PCFIX\\pcfix-backend\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -253,14 +253,12 @@ const config = {
         "native": true
       }
     ],
-    "previewFeatures": [
-      "deno"
-    ],
-    "sourceFilePath": "C:\\Users\\Martín Ratti\\Desktop\\PCFIX\\pcfix-backend\\prisma\\schema.prisma",
+    "previewFeatures": [],
+    "sourceFilePath": "C:\\Users\\tacon\\OneDrive\\Escritorio\\PCFIX\\pcfix-backend\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../.env"
   },
   "relativePath": "../../prisma",
@@ -270,6 +268,7 @@ const config = {
     "db"
   ],
   "activeProvider": "mysql",
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -278,8 +277,8 @@ const config = {
       }
     }
   },
-  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider        = \"prisma-client-js\"\n  previewFeatures = [\"deno\"]\n  output          = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       Int      @id @default(autoincrement())\n  email    String   @unique\n  nombre   String\n  apellido String\n  password String // Guardaremos el hash, no la contraseña en texto plano\n  role     Role     @default(USER)\n  cliente  Cliente?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Cliente {\n  id          Int        @id @default(autoincrement())\n  userId      Int        @unique\n  user        User       @relation(fields: [userId], references: [id])\n  direccion   String?\n  telefono    String?\n  localidadId Int?\n  localidad   Localidad? @relation(fields: [localidadId], references: [id])\n  ventas      Venta[]\n}\n\nmodel Localidad {\n  id          Int       @id @default(autoincrement())\n  nombre      String\n  codPostal   String\n  provinciaId Int\n  provincia   Provincia @relation(fields: [provinciaId], references: [id])\n  clientes    Cliente[]\n}\n\nmodel Provincia {\n  id          Int         @id @default(autoincrement())\n  nombre      String      @unique\n  localidades Localidad[]\n}\n\nmodel Producto {\n  id          Int          @id @default(autoincrement())\n  nombre      String\n  descripcion String       @db.Text\n  precio      Decimal      @db.Decimal(10, 2)\n  stock       Int\n  foto        String?\n  categoriaId Int\n  categoria   Categoria    @relation(fields: [categoriaId], references: [id])\n  lineasVenta LineaVenta[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Categoria {\n  id        Int        @id @default(autoincrement())\n  nombre    String     @unique\n  productos Producto[]\n}\n\nmodel Venta {\n  id          Int          @id @default(autoincrement())\n  fecha       DateTime     @default(now())\n  montoTotal  Decimal      @db.Decimal(10, 2)\n  clienteId   Int\n  cliente     Cliente      @relation(fields: [clienteId], references: [id])\n  lineasVenta LineaVenta[]\n  pagos       Pago[]\n}\n\nmodel LineaVenta {\n  id         Int      @id @default(autoincrement())\n  ventaId    Int\n  venta      Venta    @relation(fields: [ventaId], references: [id])\n  productoId Int\n  producto   Producto @relation(fields: [productoId], references: [id])\n  cantidad   Int\n  subTotal   Decimal  @db.Decimal(10, 2)\n\n  @@unique([ventaId, productoId]) // Evita duplicados del mismo producto en una venta\n}\n\nmodel Pago {\n  id           Int        @id @default(autoincrement())\n  fecha        DateTime   @default(now())\n  monto        Decimal    @db.Decimal(10, 2)\n  ventaId      Int\n  venta        Venta      @relation(fields: [ventaId], references: [id])\n  metodoPagoId Int\n  metodoPago   MetodoPago @relation(fields: [metodoPagoId], references: [id])\n}\n\nmodel MetodoPago {\n  id     Int    @id @default(autoincrement())\n  nombre String @unique\n  pagos  Pago[]\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n",
-  "inlineSchemaHash": "d5c125bd9a131f5e9bd76740cfdff7c489c830486a24260a0c2030322ade2cfc",
+  "inlineSchema": "// This is your Prisma schema file,\n// learn more about it in the docs: https://pris.ly/d/prisma-schema\n\ngenerator client {\n  provider = \"prisma-client-js\"\n  output   = \"../generated/client\"\n}\n\ndatasource db {\n  provider = \"mysql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id       Int      @id @default(autoincrement())\n  email    String   @unique\n  nombre   String\n  apellido String\n  password String // Guardaremos el hash, no la contraseña en texto plano\n  role     Role     @default(USER)\n  cliente  Cliente?\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Cliente {\n  id          Int        @id @default(autoincrement())\n  userId      Int        @unique\n  user        User       @relation(fields: [userId], references: [id])\n  direccion   String?\n  telefono    String?\n  localidadId Int?\n  localidad   Localidad? @relation(fields: [localidadId], references: [id])\n  ventas      Venta[]\n}\n\nmodel Localidad {\n  id          Int       @id @default(autoincrement())\n  nombre      String\n  codPostal   String\n  provinciaId Int\n  provincia   Provincia @relation(fields: [provinciaId], references: [id])\n  clientes    Cliente[]\n}\n\nmodel Provincia {\n  id          Int         @id @default(autoincrement())\n  nombre      String      @unique\n  localidades Localidad[]\n}\n\nmodel Producto {\n  id          Int          @id @default(autoincrement())\n  nombre      String\n  descripcion String       @db.Text\n  precio      Decimal      @db.Decimal(10, 2)\n  stock       Int\n  foto        String?\n  categoriaId Int\n  categoria   Categoria    @relation(fields: [categoriaId], references: [id])\n  lineasVenta LineaVenta[]\n\n  createdAt DateTime @default(now())\n  updatedAt DateTime @updatedAt\n}\n\nmodel Categoria {\n  id        Int        @id @default(autoincrement())\n  nombre    String     @unique\n  productos Producto[]\n}\n\nmodel Venta {\n  id          Int          @id @default(autoincrement())\n  fecha       DateTime     @default(now())\n  montoTotal  Decimal      @db.Decimal(10, 2)\n  clienteId   Int\n  cliente     Cliente      @relation(fields: [clienteId], references: [id])\n  lineasVenta LineaVenta[]\n  pagos       Pago[]\n}\n\nmodel LineaVenta {\n  id         Int      @id @default(autoincrement())\n  ventaId    Int\n  venta      Venta    @relation(fields: [ventaId], references: [id])\n  productoId Int\n  producto   Producto @relation(fields: [productoId], references: [id])\n  cantidad   Int\n  subTotal   Decimal  @db.Decimal(10, 2)\n\n  @@unique([ventaId, productoId]) // Evita duplicados del mismo producto en una venta\n}\n\nmodel Pago {\n  id           Int        @id @default(autoincrement())\n  fecha        DateTime   @default(now())\n  monto        Decimal    @db.Decimal(10, 2)\n  ventaId      Int\n  venta        Venta      @relation(fields: [ventaId], references: [id])\n  metodoPagoId Int\n  metodoPago   MetodoPago @relation(fields: [metodoPagoId], references: [id])\n}\n\nmodel MetodoPago {\n  id     Int    @id @default(autoincrement())\n  nombre String @unique\n  pagos  Pago[]\n}\n\nenum Role {\n  USER\n  ADMIN\n}\n",
+  "inlineSchemaHash": "3cf653d264ed2f954e2d4e13f12f9f3f11353dfd09d030da3cdc2a1260da9dcd",
   "copyEngine": true
 }
 config.dirname = '/'

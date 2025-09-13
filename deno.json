@@ -3,7 +3,8 @@
     "start": "deno run -A --watch=static/,routes/ dev.ts",
     "prisma:generate": "npx prisma generate",
     "prisma:migrate": "npx prisma migrate dev",
-    "prisma:studio": "npx prisma studio"
+    "prisma:studio": "npx prisma studio",
+    "prisma:seed": "deno run -A prisma/seed.ts"
   },
   "imports": {
     "$fresh/": "https://deno.land/x/fresh@1.7.3/",
@@ -13,8 +14,10 @@
     "@preact/signals-core": "https://esm.sh/*@preact/signals-core@1.5.1",
     "tailwindcss": "npm:tailwindcss@3.4.1",
     "tailwindcss/": "npm:/tailwindcss@3.4.1/",
-    "@prisma/client": "npm:@prisma/client",
-    "$std/": "https://deno.land/std@0.216.0/"
+    "@prisma/client": "./generated/client/deno/edge.ts",
+    "$std/": "https://deno.land/std@0.216.0/",
+    "bcrypt": "npm:bcrypt@5.1.1",
+    "djwt": "https://deno.land/x/djwt@v3.0.2/mod.ts"
   },
   "compilerOptions": { "jsx": "react-jsx", "jsxImportSource": "preact" },
   "nodeModulesDir": false
